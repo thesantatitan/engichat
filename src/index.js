@@ -3,9 +3,9 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import CallRoom2 from './components/CallRoom2';
 import * as serviceWorker from './serviceWorker';
-
+import ChatRoom from './components/ChatRoom';
 ReactDOM.render(
-  <CallRoom2 />,
+  <ChatRoom />,
   document.getElementById('root')
 );
 
