@@ -3,10 +3,10 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import CallRoom2 from './components/CallRoom2';
 import * as serviceWorker from './serviceWorker';
-import Rooms from './components/Rooms';
+import App from './components/App';
 
 ReactDOM.render(
-  <CallRoom2 />,
+  <App />,
   document.getElementById('root')
 );
 
