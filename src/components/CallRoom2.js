@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import './App.css';
+import '../App.css';
 import io from "socket.io-client";
 import Peer from "simple-peer";
 import styled from "styled-components";
