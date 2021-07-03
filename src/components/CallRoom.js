@@ -24,7 +24,7 @@ const Video = styled.video`
   height: 50%;
 `;
 
-function CallRoom2() {
+function CallRoom() {
     const currentChat = useLocation().pathname.split('/')[2];
     const authUser = useAuth();
 
@@ -204,4 +204,4 @@ function CallRoom2() {
     );
 }
 
-export default CallRoom2;
+export default CallRoom;

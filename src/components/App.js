@@ -4,7 +4,7 @@ import * as ROUTES from '../constants/routes';
 import Signup from './Signup';
 import MainRoom from './MainRoom';
 import Signin from './Signin';
-import CallRoom2 from './CallRoom2';
+import CallRoom from './CallRoom';
 import { AuthProvider,useAuth } from '../services/AuthContext';
 
 function App() {
@@ -24,7 +24,7 @@ function App() {
                         <MainRoom />
                     </Route>
                     <Route path={ROUTES.CALL}>
-                        <CallRoom2 />
+                        <CallRoom />
                     </Route>
                     <Route exact path="/">
                         {authUser?<Redirect to={ROUTES.MAINROOM}/>:<Redirect to={ROUTES.SIGNIN}/>}

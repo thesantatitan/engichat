@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import CallRoom2 from './components/CallRoom2';
 import * as serviceWorker from './serviceWorker';
 import App from './components/App';
 
