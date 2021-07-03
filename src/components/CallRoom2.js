@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
 import '../App.css';
-import io from "socket.io-client";
 import Peer from "simple-peer";
 import styled from "styled-components";
 import { db } from '../services/firebase';
@@ -48,7 +47,6 @@ function CallRoom2() {
 
     const userVideo = useRef();
     const partnerVideo = useRef();
-    const socket = useRef();
 
 
     useEffect(() => {
@@ -97,28 +95,8 @@ function CallRoom2() {
         }
     }, []);
 
-    // useEffect(() => {
-    //     socket.current = io.connect("/");
-    //     // navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(stream => {
-    //     //     setStream(stream);
-    //     //     if (userVideo.current) {
-    //     //         userVideo.current.srcObject = stream;
-    //     //     }
-    //     // })
+  
 
-    //     // socket.current.on("yourID", (id) => {
-    //     //     setYourID(id);
-    //     // })
-    //     // socket.current.on("allUsers", (users) => {
-    //     //     setUsers(users);
-    //     // })
-
-    //     // socket.current.on("hey", (data) => {
-    //     //     setReceivingCall(true);
-    //     //     setCaller(data.from);
-    //     //     setCallerSignal(data.signal);
-    //     // })
-    // }, []);
 
     function callPeer(id) {
         const peer = new Peer({
@@ -143,7 +121,6 @@ function CallRoom2() {
         });
 
         peer.on("signal", data => {
-            // socket.current.emit("callUser", { userToCall: id, signalData: data, from: yourID })
             inCallRef.child(id).child(yourID).set({ callingData: { signalData: data } });
         })
 
@@ -153,10 +130,6 @@ function CallRoom2() {
             }
         });
 
-        // socket.current.on("callAccepted", signal => {
-        //     setCallAccepted(true);
-        //     peer.signal(signal);
-        // })
 
         inCallRef.child(id).child(yourID).child('returnSignalData').on('child_added', (callAccepted) => {
             setCallAccepted(true);
@@ -213,15 +186,6 @@ function CallRoom2() {
                 {PartnerVideo}
             </Row>
             <Row>
-                {/* {users.map(key => {
-                    if (key === yourID) {
-                        return null;
-                    }
-                    return (
-                        <button onClick={() => callPeer(key)}>Call {key}</button>
-                    );
-                })} */}
-
                 {
                     users.map((user) => {
                         if (user !== yourID) {
