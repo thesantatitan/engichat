@@ -3,9 +3,10 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import CallRoom2 from './components/CallRoom2';
 import * as serviceWorker from './serviceWorker';
+import Signin from './components/Signin';
 
 ReactDOM.render(
-  <CallRoom2 />,
+  <Signin />,
   document.getElementById('root')
 );
 
