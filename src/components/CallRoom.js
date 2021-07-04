@@ -39,15 +39,30 @@ function CallRoom() {
     const [inCallRef, setInCallRef] = useState(db.ref('chats/' + currentChat + '/inCall'));
 
 
-    const [stream, setStream] = useState();
-    const [receivingCall, setReceivingCall] = useState(false);
-    const [caller, setCaller] = useState("");
-    const [callerSignal, setCallerSignal] = useState();
-    const [callAccepted, setCallAccepted] = useState(false);
+    const [stream, _setStream] = useState();
+    const streamRef = useRef();
+    const setStream = (data) => {
+        streamRef.current = data;
+        _setStream(data);
+    }
 
     const userVideo = useRef();
-    const partnerVideo = useRef();
 
+    const [uidToCallingSignal,_setUidToCallingSignal] = useState(new Map());
+    const uidToCallingSignalRef = useRef(new Map());
+    const setUidToCallingSignal = (data) => {
+        uidToCallingSignalRef.current = data;
+        _setUidToCallingSignal(data);
+    }
+
+
+
+    const [uidToPeer,_setUidToPeer] = useState(new Map());
+    const uidToPeerRef = useRef(uidToPeer);
+    const setUidToPeer = (data) => {
+        uidToPeerRef.current = data;
+        _setUidToPeer(data);
+    };
 
     useEffect(() => {
 
@@ -58,7 +73,7 @@ function CallRoom() {
         navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(stream => {
             setStream(stream);
             if (userVideo.current) {
-                userVideo.current.srcObject = stream;
+                userVideo.current.srcObject = streamRef.current;
             }
         });
 
@@ -78,14 +93,17 @@ function CallRoom() {
                     let tempUsersList = usersRef.current.slice();
                     tempUsersList.push(newUser.key);
                     setUsers(tempUsersList);
+
+                    callPeer(newUser.key);
                 }
             });
         });
 
         const userCallingMeCallback = inCallRef.child(yourID).on('child_added', (callingUser) => {
-            setReceivingCall(true);
-            setCaller(callingUser.key);
-            setCallerSignal(callingUser.child('callingData').child('signalData').val());
+            let tempMap = new Map(uidToCallingSignalRef.current);
+            tempMap.set(callingUser.key,callingUser.child('callingData').child('signalData').val());
+            setUidToCallingSignal(tempMap);
+            acceptCall(callingUser.key);
         });
 
 
@@ -117,88 +135,83 @@ function CallRoom() {
                     }
                 ]
             },
-            stream: stream,
+            stream: streamRef.current,
         });
 
         peer.on("signal", data => {
             inCallRef.child(id).child(yourID).set({ callingData: { signalData: data } });
         })
 
-        peer.on("stream", stream => {
-            if (partnerVideo.current) {
-                partnerVideo.current.srcObject = stream;
-            }
-        });
+       
 
 
         inCallRef.child(id).child(yourID).child('returnSignalData').on('child_added', (callAccepted) => {
-            setCallAccepted(true);
             peer.signal(callAccepted.val());
         })
 
+        let tempMap = new Map(uidToPeerRef.current);
+        tempMap.set(id,peer);
+        setUidToPeer(tempMap);
+
     }
 
-    function acceptCall() {
-        setCallAccepted(true);
+    function acceptCall(caller) {
         const peer = new Peer({
             initiator: false,
             trickle: false,
-            stream: stream,
+            stream: streamRef.current,
         });
         peer.on("signal", data => {
             inCallRef.child(yourID).child(caller).child("returnSignalData").set({ signalData: data });
         })
 
-        peer.on("stream", stream => {
-            partnerVideo.current.srcObject = stream;
-        });
+        
 
-        peer.signal(callerSignal);
+        peer.signal(uidToCallingSignalRef.current.get(caller));
+        
+        let tempMap = new Map(uidToPeerRef.current);
+        tempMap.set(caller,peer);
+        setUidToPeer(tempMap);
+
     }
 
     let UserVideo;
-    if (stream) {
+    if (streamRef.current) {
         UserVideo = (
             <Video playsInline muted ref={userVideo} autoPlay />
         );
     }
 
-    let PartnerVideo;
-    if (callAccepted) {
-        PartnerVideo = (
-            <Video playsInline ref={partnerVideo} autoPlay />
-        );
+
+    const VideoComponent = (props) => {
+        const ref = useRef();
+
+        useEffect(() => {
+            props.peer.on("stream",stream =>{
+                ref.current.srcObject = stream;
+            });
+        },[]);
+
+        return (<Video playsInline autoPlay ref={ref}/>);
+
     }
 
-    let incomingCall;
-    if (receivingCall) {
-        incomingCall = (
-            <div>
-                <h1>{caller} is calling you</h1>
-                <button onClick={acceptCall}>Accept</button>
-            </div>
-        )
-    }
+    const renderVideos = () => {
+        let partnerVideos = [];
+        uidToPeerRef.current.forEach((peer,uid) => {
+            partnerVideos.push(<VideoComponent peer={peer} key={uid}/>);
+        });
+        return partnerVideos;
+    };
+
+
     return (
         <Container>
             <Row>
                 {UserVideo}
-                {PartnerVideo}
-            </Row>
-            <Row>
-                {
-                    users.map((user) => {
-                        if (user !== yourID) {
-                            return (
-                                <button onClick={() => callPeer(user)}>Call {user}</button>
-                            );
-                        }
-                    })
+                {   
+                    renderVideos()
                 }
-
-            </Row>
-            <Row>
-                {incomingCall}
             </Row>
         </Container>
     );
