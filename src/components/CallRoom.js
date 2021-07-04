@@ -129,6 +129,9 @@ function CallRoom() {
                         credential: "qwertyuiop"
                     },
                     {
+                        urls:"stun:stun.wtfismyip.com",
+                    },
+                    {
                         urls: "turn:numb.viagenie.ca",
                         username: "cyber4dude@gmail.com",
                         credential: "qwertyuiop"
@@ -166,6 +169,9 @@ function CallRoom() {
                         urls: "stun:numb.viagenie.ca",
                         username: "cyber4dude@gmail.com",
                         credential: "qwertyuiop"
+                    },
+                    {
+                        urls:"stun:stun.wtfismyip.com",
                     },
                     {
                         urls: "turn:numb.viagenie.ca",

@@ -109,12 +109,15 @@ const useStyles = makeStyles((theme) => ({
               className={classes.submit}
               onClick={(event) => {
                 event.preventDefault();
-                auth.createUserWithEmailAndPassword(email, password)
+                auth.createUserWithEmailAndPassword(email.trim(), password)
                 .then((authUser) => {
                   addUserToDb(authUser.user);
                   console.log(authUser.user.email)
                   })
-                .catch(error => console.log(error));
+                .catch(error => {
+                  console.log(email, password);
+                  console.log(error);
+                  });
               }}
             >
               Sign Up

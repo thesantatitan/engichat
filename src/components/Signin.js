@@ -81,7 +81,7 @@ export default function Signin() {
             className={classes.submit}
             onClick = {(event) => {
                 event.preventDefault();
-                auth.signInWithEmailAndPassword(email, password)
+                auth.signInWithEmailAndPassword(email.trim(), password)
                 .then(() => {
                    console.log("SiginSUccess"); 
                 })
