@@ -125,13 +125,13 @@ function CallRoom() {
                 iceServers: [
                     {
                         urls: "stun:numb.viagenie.ca",
-                        username: "sultan1640@gmail.com",
-                        credential: "98376683"
+                        username: "cyber4dude@gmail.com",
+                        credential: "qwertyuiop"
                     },
                     {
                         urls: "turn:numb.viagenie.ca",
-                        username: "sultan1640@gmail.com",
-                        credential: "98376683"
+                        username: "cyber4dude@gmail.com",
+                        credential: "qwertyuiop"
                     }
                 ]
             },
@@ -159,6 +159,21 @@ function CallRoom() {
         const peer = new Peer({
             initiator: false,
             trickle: false,
+            config: {
+
+                iceServers: [
+                    {
+                        urls: "stun:numb.viagenie.ca",
+                        username: "cyber4dude@gmail.com",
+                        credential: "qwertyuiop"
+                    },
+                    {
+                        urls: "turn:numb.viagenie.ca",
+                        username: "cyber4dude@gmail.com",
+                        credential: "qwertyuiop"
+                    }
+                ]
+            },
             stream: streamRef.current,
         });
         peer.on("signal", data => {
