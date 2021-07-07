@@ -19,6 +19,7 @@ const useStyles = makeStyles((theme) => ({
     },
     rooms:{
         flexGrow:1,
+        maxWidth:'300px',
     },
     chats:{
         flexGrow:5,
