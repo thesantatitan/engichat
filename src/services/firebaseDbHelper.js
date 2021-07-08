@@ -34,8 +34,9 @@ function createNewChat(uid){
     addUserToChat(uid,newChatRef.key);
 }
 
-function getEmailFromUid(uid){
-    return uidToEmail.get(uid);
+async function getEmailFromUid(uid){
+    let email = await (await db.ref('users/'+uid+'/email').get()).val();
+    return email;
 }
 
 
