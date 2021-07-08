@@ -15,6 +15,7 @@ const useStyles = makeStyles((theme) => ({
     videos: {
         flexGrow: 10,
         width: '100vw',
+        minHeight:'100%',
     },
     video: {
         height: '100%',

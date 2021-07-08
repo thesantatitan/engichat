@@ -55,6 +55,10 @@ function addUserToContact(senderUID,recieverMail){
     db.ref('users/'+senderUID+'/contacts/'+emailToUid.get(recieverMail)).set({inCall:false});
 }
 
+function sendMessage(senderUID,recieverUID,message){
+    const newmsgref = db.ref('users/'+senderUID+'/contacts/'+recieverUID+'/messages').push({sender:senderUID,text:message});
+    db.ref('users/'+recieverUID+'/contacts/'+senderUID+'/messages/'+newmsgref.key).set({sender:senderUID,text:message});
+}
 
 export {addUserToDb};
 export {addUserToChat};
@@ -65,3 +69,4 @@ export {addUserEmailToChat};
 export {deleteContact};
 export {sendContactRequest};
 export {addUserToContact};
+export {sendMessage};

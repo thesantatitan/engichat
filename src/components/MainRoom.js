@@ -10,8 +10,9 @@ import Button from '@material-ui/core/Button';
 import Rooms from './Rooms';
 import Chats from './Chats';
 import {createNewChat} from '../services/firebaseDbHelper';
-import {Redirect} from 'react-router-dom';
+import {Redirect, useHistory} from 'react-router-dom';
 import Contacts from './Contacts';
+import * as ROUTES from '../constants/routes';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -25,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
         overflow: 'auto',
     },
     chats:{
-        flexGrow:5,
+        flexGrow:7,
     },
     contacts:{
         flexGrow:1,
@@ -36,6 +37,8 @@ const useStyles = makeStyles((theme) => ({
 function MainRoom(){
     const authUser = useAuth();
     const classes = useStyles();
+    const history = useHistory();
+
 
     const [currentChat,setCurrentChat] = useState('');
     const [currentContact,setCurrentContact] = useState('');
@@ -46,13 +49,27 @@ function MainRoom(){
         )
     }
     return (
-        <Grid container direction="column">
+        <Grid container direction="column" style={{minHeight:'100vh', height:'auto'}}>
             <Grid item>
                 <AppBar position="relative">
                     <Toolbar>
                         <Typography className={classes.title}>
                             Logged in as {authUser.user.email}
                         </Typography>
+                        <Button
+                            color='inherit'
+                            onClick={(event) =>{
+                                event.preventDefault();
+                                if(currentChat!==''){
+                                    history.push(ROUTES.CALL);
+                                }
+                                if(currentContact!==''){
+                                    history.push({pathname:ROUTES.CONTACT_CALL,state:{contact:currentContact}});
+                                }
+                            }}
+                        >
+                            Join Call
+                        </Button>
                         <Button 
                             color="inherit"
                             onClick={(event) => {
@@ -75,8 +92,8 @@ function MainRoom(){
                     </Toolbar>
                 </AppBar>
             </Grid>
-            <Grid item>
-                <Grid container direction="row">
+            <Grid item style={{minHeight:'90vh',height:'auto'}}>
+                <Grid container direction="row" style={{minHeight:'90vh',height:'auto'}}>
                     <Grid item className={classes.rooms}>
                         <Rooms updateChat = {(data) => {setCurrentChat(data);setCurrentContact('')}} currentChat={currentChat}/>
                     </Grid>
