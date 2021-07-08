@@ -42,6 +42,13 @@ function MainRoom(){
 
     const [currentChat,setCurrentChat] = useState('');
     const [currentContact,setCurrentContact] = useState('');
+    const [key,setKey] = useState('');
+
+    const setCurrent = (chat,contact) => {
+        setCurrentChat(chat);
+        setCurrentContact(contact);
+        setKey(chat+contact);
+    };
 
     if(authUser.user===null){
         return (
@@ -95,13 +102,13 @@ function MainRoom(){
             <Grid item style={{minHeight:'90vh',height:'auto'}}>
                 <Grid container direction="row" style={{minHeight:'90vh',height:'auto'}}>
                     <Grid item className={classes.rooms}>
-                        <Rooms updateChat = {(data) => {setCurrentChat(data);setCurrentContact('')}} currentChat={currentChat}/>
+                        <Rooms updateChat = {(data) => {setCurrent(data,'')}} currentChat={currentChat}/>
                     </Grid>
                     <Grid item className={classes.chats}>
-                        <Chats currentChat={currentChat} currentContact={currentContact}/>
+                        <Chats currentChat={currentChat} currentContact={currentContact} key={key} />
                     </Grid>
                     <Grid item className={classes.contacts}>
-                        <Contacts updateContact = {(data) => {setCurrentContact(data);setCurrentChat('')}} currentContact={currentContact}/>
+                        <Contacts updateContact = {(data) => {setCurrent('',data)}} currentContact={currentContact}/>
                     </Grid>
                 </Grid>
             </Grid>

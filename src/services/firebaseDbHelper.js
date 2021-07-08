@@ -60,6 +60,10 @@ function sendMessage(senderUID,recieverUID,message){
     db.ref('users/'+recieverUID+'/contacts/'+senderUID+'/messages/'+newmsgref.key).set({sender:senderUID,text:message});
 }
 
+function sendMessageToChatRoom(senderUID,chatID,message){
+    db.ref('chats/'+chatID+'/messages').push({sender:senderUID,text:message});
+}
+
 export {addUserToDb};
 export {addUserToChat};
 export {createNewChat};
@@ -70,3 +74,4 @@ export {deleteContact};
 export {sendContactRequest};
 export {addUserToContact};
 export {sendMessage};
+export {sendMessageToChatRoom};

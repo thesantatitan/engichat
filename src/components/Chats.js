@@ -7,7 +7,7 @@ import Messages from './Messages';
 import {db} from '../services/firebase';
 import {useAuth} from '../services/AuthContext';
 import SendMessage from './SendMessage';
-import {sendMessage} from '../services/firebaseDbHelper';
+import {sendMessage, sendMessageToChatRoom} from '../services/firebaseDbHelper';
 
 const useStyles = makeStyles((theme) => ({
     messages:{
@@ -25,7 +25,16 @@ const Chats = (props) => {
         return <h1>Chats</h1>;
     }else{
         if(props.currentChat!==''){
-            return <h1>ChatSelected</h1>
+            return (
+                <Grid container spacing={2} direction="column" style={{minHeight:'100%',alignItems:'stretch',justifyContent:'flex-end'}}>
+                    <Grid item>
+                        <Messages messagesDbRef={db.ref('chats/'+props.currentChat+'/messages')}/>
+                    </Grid>
+                    <Grid item>
+                        <SendMessage send={(data) => {sendMessageToChatRoom(authUser.user.uid,props.currentChat,data)}} />
+                    </Grid>
+                </Grid>
+                );
         }else{
             return (
             <Grid container spacing={2} direction="column" style={{minHeight:'100%',alignItems:'stretch',justifyContent:'flex-end'}}>
