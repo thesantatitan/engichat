@@ -81,7 +81,7 @@ function MainRoom(){
                         <Rooms updateChat = {(data) => {setCurrentChat(data);setCurrentContact('')}} currentChat={currentChat}/>
                     </Grid>
                     <Grid item className={classes.chats}>
-                        <Chats currentChat={currentChat}/>
+                        <Chats currentChat={currentChat} currentContact={currentContact}/>
                     </Grid>
                     <Grid item className={classes.contacts}>
                         <Contacts updateContact = {(data) => {setCurrentContact(data);setCurrentChat('')}} currentContact={currentContact}/>

@@ -9,6 +9,9 @@ const Chats = (props) => {
         {
             props.currentChat!==""?<Link to={ROUTES.CALL+'/'+props.currentChat}>Join Call</Link>:<></>
         }
+        {
+            props.currentContact!==""?<Link to={{pathname:ROUTES.CONTACT_CALL,state:{contact:props.currentContact}}}>Join ContactCall</Link>:<></>
+        }
         </>
     )
 }
