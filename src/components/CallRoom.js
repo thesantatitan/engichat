@@ -125,9 +125,13 @@ function CallRoom() {
             inCallRef.off('child_added', newUserIncallCallback);
             inCallRef.child(yourID).off('child_added', userCallingMeCallback);
             inCallRef.child(yourID).remove();
+            if (streamRef.current) {
+                streamRef.current.getTracks().forEach((track) => { track.stop() });
+            }
             uidToPeerRef.current.forEach((peer)=>{
                 peer.destroy();
             });
+            setUidToPeer(new Map());
         }
     }, []);
 
