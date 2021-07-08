@@ -39,9 +39,16 @@ function getEmailFromUid(uid){
 }
 
 
+function deleteContact(uid1,uid2){
+    db.ref('users/'+uid1+'/contacts/'+uid2).remove();
+    db.ref('users/'+uid2+'/contacts/'+uid1).remove();
+}
+
+
 export {addUserToDb};
 export {addUserToChat};
 export {createNewChat};
 export {getEmailFromUid};
 export {deleteUserFromChat};
 export {addUserEmailToChat};
+export {deleteContact};

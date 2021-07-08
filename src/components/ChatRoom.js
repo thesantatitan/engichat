@@ -12,7 +12,7 @@ import UserCard from './UserCard';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import TextField from '@material-ui/core/TextField';
-import {addUserEmailToChat} from '../services/firebaseDbHelper';
+import {addUserEmailToChat,deleteUserFromChat} from '../services/firebaseDbHelper';
 
 const useStyles = makeStyles((theme) => ({
     root:{
@@ -81,7 +81,12 @@ const ChatRoom = (props) => {
                     <List>
                         {   
                             userList.map((user) =>{
-                                return <UserCard uid={user} chatID={props.chatID} key={user} />
+                                return <UserCard 
+                                    uid={user} 
+                                    chatID={props.chatID} 
+                                    key={user}
+                                    handleClickOnDelete = {() => {deleteUserFromChat(user,props.chatID)}}
+                                />
                             })
                         }
                         <ListItem>

@@ -4,7 +4,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
-import {getEmailFromUid, deleteUserFromChat} from '../services/firebaseDbHelper';
+import {getEmailFromUid} from '../services/firebaseDbHelper';
 
 const UserCard = (props) => {
     return ( 
@@ -14,7 +14,7 @@ const UserCard = (props) => {
                 <IconButton
                     onClick={(event) => {
                         event.preventDefault();
-                        deleteUserFromChat(props.uid,props.chatID);
+                        props.handleClickOnDelete();
                     }}
                 >
                     <DeleteIcon/>

@@ -11,6 +11,7 @@ import Rooms from './Rooms';
 import Chats from './Chats';
 import {createNewChat} from '../services/firebaseDbHelper';
 import {Redirect} from 'react-router-dom';
+import Contacts from './Contacts';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -20,9 +21,15 @@ const useStyles = makeStyles((theme) => ({
     rooms:{
         flexGrow:1,
         maxWidth:'300px',
+        maxHeight:'100vh',
+        overflow: 'auto',
     },
     chats:{
         flexGrow:5,
+    },
+    contacts:{
+        flexGrow:1,
+        maxWidth:'300px',
     }
 }))
 
@@ -74,6 +81,9 @@ function MainRoom(){
                     </Grid>
                     <Grid item className={classes.chats}>
                         <Chats currentChat={currentChat}/>
+                    </Grid>
+                    <Grid item className={classes.contacts}>
+                        <Contacts />
                     </Grid>
                 </Grid>
             </Grid>
