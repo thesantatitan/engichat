@@ -13,6 +13,7 @@ import {createNewChat} from '../services/firebaseDbHelper';
 import {Redirect, useHistory} from 'react-router-dom';
 import Contacts from './Contacts';
 import * as ROUTES from '../constants/routes';
+import Snackbar from '@material-ui/core/Snackbar';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -38,7 +39,7 @@ function MainRoom(){
     const authUser = useAuth();
     const classes = useStyles();
     const history = useHistory();
-
+    const [snackOpen,setSnackOpen] = useState(false);
 
     const [currentChat,setCurrentChat] = useState('');
     const [currentContact,setCurrentContact] = useState('');
@@ -72,6 +73,9 @@ function MainRoom(){
                                 }
                                 if(currentContact!==''){
                                     history.push({pathname:ROUTES.CONTACT_CALL,state:{contact:currentContact}});
+                                }
+                                if(key===''){
+                                    setSnackOpen(true);
                                 }
                             }}
                         >
@@ -112,6 +116,16 @@ function MainRoom(){
                     </Grid>
                 </Grid>
             </Grid>
+            <Snackbar
+                anchorOrigin = {{
+                    vertical:'bottom',
+                    horizontal:'center',
+                }}
+                open={snackOpen}
+                autoHideDuration={1000}
+                onClose={()=>setSnackOpen(false)}
+                message='Select a ChatRoom or a Contact'
+            />
         </Grid>
     );
 }
