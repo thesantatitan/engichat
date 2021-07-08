@@ -44,6 +44,10 @@ function deleteContact(uid1,uid2){
     db.ref('users/'+uid2+'/contacts/'+uid1).remove();
 }
 
+function sendContactRequest(senderUID,recieverMail){
+    db.ref('users/'+emailToUid.get(recieverMail)+'/requests/'+senderUID).set(true);
+}
+
 
 export {addUserToDb};
 export {addUserToChat};
@@ -52,3 +56,4 @@ export {getEmailFromUid};
 export {deleteUserFromChat};
 export {addUserEmailToChat};
 export {deleteContact};
+export {sendContactRequest};
