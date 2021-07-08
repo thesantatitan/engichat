@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import Box from '@material-ui/core/Box';
 import { db } from '../services/firebase';
 import { useAuth } from '../services/AuthContext';
-import { deleteContact, addUserToContact} from '../services/firebaseDbHelper';
+import { deleteContact, addUserToContact } from '../services/firebaseDbHelper';
 import UserCard from './UserCard';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -10,7 +10,7 @@ import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import IconButton from '@material-ui/core/IconButton';
 import TextField from '@material-ui/core/TextField';
 
-const Contacts = () => {
+const Contacts = (props) => {
 
     const [contactList, _setContactList] = useState([]);
     const contactListRef = useRef(contactList);
@@ -40,30 +40,41 @@ const Contacts = () => {
 
     useEffect(() => {
         const contactsDbRef = db.ref('users/' + authUser.user.uid + '/contacts');
-        const deleteContactListener = contactsDbRef.on('child_removed',(deletedContact) =>{
+        const deleteContactListener = contactsDbRef.on('child_removed', (deletedContact) => {
             let newContactList = contactListRef.current.slice();
-            newContactList.splice(newContactList.indexOf(deletedContact.key),1);
+            newContactList.splice(newContactList.indexOf(deletedContact.key), 1);
             setContactList(newContactList);
         })
 
         return () => {
-            contactsDbRef.off('child_removed',deleteContactListener);
+            contactsDbRef.off('child_removed', deleteContactListener);
         }
-    },[])
+    }, [])
 
 
 
     return (
-        <Box border={1}>
+        <Box border={1} p={'4px'}>
             <h4>Contacts</h4>
             <List>
                 {
                     contactList.map((contact) => {
-                        return <UserCard
-                            uid={contact}
-                            key={contact}
-                            handleClickOnDelete={() => { deleteContact(authUser.user.uid, contact) }}
-                        />
+                        return (
+                            <div
+                                style={{
+                                    borderStyle: props.currentContact === contact ? 'solid' : 'none',
+                                    borderColor: 'green',
+                                    borderWidth: '4px',
+                                }}
+                                key={contact}
+                                onClick={() => {props.currentContact===contact?props.updateContact(''):props.updateContact(contact)}}
+                            >
+                                <UserCard
+                                    uid={contact}
+                                    handleClickOnDelete={() => { deleteContact(authUser.user.uid, contact) }}
+                                />
+                            </div>
+                        );
                     })
                 }
                 <ListItem>
@@ -74,7 +85,7 @@ const Contacts = () => {
                         <IconButton
                             onClick={(event) => {
                                 event.preventDefault();
-                                addUserToContact(authUser.user.uid,userToAdd);
+                                addUserToContact(authUser.user.uid, userToAdd);
                             }}
                         >
                             <PersonAddIcon />
@@ -82,7 +93,7 @@ const Contacts = () => {
                     </form>
                 </ListItem>
             </List>
-        </Box>
+        </Box >
     );
 }
 

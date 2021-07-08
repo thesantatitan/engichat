@@ -38,6 +38,7 @@ function MainRoom(){
     const classes = useStyles();
 
     const [currentChat,setCurrentChat] = useState('');
+    const [currentContact,setCurrentContact] = useState('');
 
     if(authUser.user===null){
         return (
@@ -77,13 +78,13 @@ function MainRoom(){
             <Grid item>
                 <Grid container direction="row">
                     <Grid item className={classes.rooms}>
-                        <Rooms updateChat = {(data) => setCurrentChat(data)} currentChat={currentChat}/>
+                        <Rooms updateChat = {(data) => {setCurrentChat(data);setCurrentContact('')}} currentChat={currentChat}/>
                     </Grid>
                     <Grid item className={classes.chats}>
                         <Chats currentChat={currentChat}/>
                     </Grid>
                     <Grid item className={classes.contacts}>
-                        <Contacts />
+                        <Contacts updateContact = {(data) => {setCurrentContact(data);setCurrentChat('')}} currentContact={currentContact}/>
                     </Grid>
                 </Grid>
             </Grid>

@@ -51,8 +51,8 @@ function sendContactRequest(senderUID,recieverMail){
 }
 
 function addUserToContact(senderUID,recieverMail){
-    db.ref('users/'+emailToUid.get(recieverMail)+'/contacts/'+senderUID).set(true);
-    db.ref('users/'+senderUID+'/contacts/'+emailToUid.get(recieverMail)).set(true);
+    db.ref('users/'+emailToUid.get(recieverMail)+'/contacts/'+senderUID).set({inCall:false});
+    db.ref('users/'+senderUID+'/contacts/'+emailToUid.get(recieverMail)).set({inCall:false});
 }
 
 
