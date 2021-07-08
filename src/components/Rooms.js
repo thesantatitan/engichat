@@ -36,7 +36,7 @@ const Rooms = (props) => {
     },[]);
 
     return (
-        <Box border={1} maxWidth="300px">
+        <Box border={1} p={'4px'} maxWidth="300px">
             <h4>ChatRooms</h4>
             {
                 chats.map((cid) => {

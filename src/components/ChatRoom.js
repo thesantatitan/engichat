@@ -13,10 +13,11 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import TextField from '@material-ui/core/TextField';
 import {addUserEmailToChat,deleteUserFromChat} from '../services/firebaseDbHelper';
+import clsx from 'clsx';
 
 const useStyles = makeStyles((theme) => ({
     root:{
-        width:'100%',
+        width:'98%',
     },
     heading: {
         fontSize: theme.typography.pxToRem(12),
@@ -25,7 +26,12 @@ const useStyles = makeStyles((theme) => ({
     },
     details: {
         padding: theme.spacing(1),
-    }
+    },
+    selected:{
+        borderStyle:"solid",
+        borderColor:"green",
+        borderWidth:"4px",
+    },
 }))
 
 
@@ -63,7 +69,7 @@ const ChatRoom = (props) => {
     },[]);
 
     return ( 
-        <div className={classes.root}>
+        <div className={clsx(classes.root,props.chatID===props.currentChat && classes.selected)}>
             <Accordion 
                 expanded={props.chatID===props.currentChat}
                 onChange={(event,isExpanded) =>{
