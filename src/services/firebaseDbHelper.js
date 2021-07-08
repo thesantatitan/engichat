@@ -45,7 +45,13 @@ function deleteContact(uid1,uid2){
 }
 
 function sendContactRequest(senderUID,recieverMail){
-    db.ref('users/'+emailToUid.get(recieverMail)+'/requests/'+senderUID).set(true);
+    db.ref('users/'+emailToUid.get(recieverMail)+'/requests/recieved/'+senderUID).set(true);
+    db.ref('users/'+senderUID+'/requests/sent/'+emailToUid.get(recieverMail)).set(true);
+}
+
+function addUserToContact(senderUID,recieverMail){
+    db.ref('users/'+emailToUid.get(recieverMail)+'/contacts/'+senderUID).set(true);
+    db.ref('users/'+senderUID+'/contacts/'+emailToUid.get(recieverMail)).set(true);
 }
 
 
@@ -57,3 +63,4 @@ export {deleteUserFromChat};
 export {addUserEmailToChat};
 export {deleteContact};
 export {sendContactRequest};
+export {addUserToContact};

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import Box from '@material-ui/core/Box';
 import { db } from '../services/firebase';
 import { useAuth } from '../services/AuthContext';
-import { deleteContact, sendContactRequest} from '../services/firebaseDbHelper';
+import { deleteContact, addUserToContact} from '../services/firebaseDbHelper';
 import UserCard from './UserCard';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -38,6 +38,18 @@ const Contacts = () => {
     }, [])
 
 
+    useEffect(() => {
+        const contactsDbRef = db.ref('users/' + authUser.user.uid + '/contacts');
+        const deleteContactListener = contactsDbRef.on('child_removed',(deletedContact) =>{
+            let newContactList = contactListRef.current.slice();
+            newContactList.splice(newContactList.indexOf(deletedContact.key),1);
+            setContactList(newContactList);
+        })
+
+        return () => {
+            contactsDbRef.off('child_removed',deleteContactListener);
+        }
+    },[])
 
 
 
@@ -62,7 +74,7 @@ const Contacts = () => {
                         <IconButton
                             onClick={(event) => {
                                 event.preventDefault();
-                                sendContactRequest(authUser.user.uid,userToAdd);
+                                addUserToContact(authUser.user.uid,userToAdd);
                             }}
                         >
                             <PersonAddIcon />
