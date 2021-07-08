@@ -9,7 +9,7 @@ const SendMessage = (props) => {
     return (
         <form>
             <TextField
-                style={{ 'width': '90%' }}
+                style={{ 'width': '94%' }}
                 variant='outlined'
                 value={message}
                 onChange={(event) => { setMessage(event.target.value) }}

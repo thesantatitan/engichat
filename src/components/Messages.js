@@ -24,7 +24,7 @@ const Messages = ({messagesDbRef}) => {
     },[]);
 
     return (
-        <Grid container direction='column' justify='flex-end'>
+        <Grid container spacing={1} direction='column' justify='flex-end'>
             {
                 messageList.map((message) =>{
                     return (

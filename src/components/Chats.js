@@ -28,7 +28,7 @@ const Chats = (props) => {
             return <h1>ChatSelected</h1>
         }else{
             return (
-            <Grid container direction="column" style={{minHeight:'100%',alignItems:'stretch',justifyContent:'flex-end'}}>
+            <Grid container spacing={2} direction="column" style={{minHeight:'100%',alignItems:'stretch',justifyContent:'flex-end'}}>
                 <Grid item>
                     <Messages messagesDbRef={db.ref('users/'+authUser.user.uid+'/contacts/'+props.currentContact+'/messages')}/>
                 </Grid>
