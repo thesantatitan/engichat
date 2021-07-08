@@ -13,9 +13,16 @@ const SendMessage = (props) => {
                 variant='outlined'
                 value={message}
                 onChange={(event) => { setMessage(event.target.value) }}
+                onKeyPress={(event) => {
+                    if (event.key === 'Enter') {
+                        event.preventDefault();
+                        props.send(message);
+                        setMessage('');
+                    }
+                }}
             />
             <IconButton
-                onClick={(event) =>{
+                onClick={(event) => {
                     event.preventDefault();
                     props.send(message);
                     setMessage('');

@@ -68,7 +68,7 @@ function MainRoom(){
                             onClick={(event) =>{
                                 event.preventDefault();
                                 if(currentChat!==''){
-                                    history.push(ROUTES.CALL);
+                                    history.push({pathname:ROUTES.CALL,state:{currentChat:currentChat}});
                                 }
                                 if(currentContact!==''){
                                     history.push({pathname:ROUTES.CONTACT_CALL,state:{contact:currentContact}});

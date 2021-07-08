@@ -3,31 +3,45 @@ import '../App.css';
 import Peer from "simple-peer";
 import styled from "styled-components";
 import { db } from '../services/firebase';
-import { useLocation } from 'react-router-dom';
+import { useLocation,useHistory } from 'react-router-dom';
 import { useAuth } from '../services/AuthContext';
+import Grid from '@material-ui/core/Grid';
+import { makeStyles } from '@material-ui/core/styles';
+import Chats from './Chats';
+import IconButton from '@material-ui/core/IconButton';
+import CallEndIcon from '@material-ui/icons/CallEnd';
+import * as ROUTES from '../constants/routes'
+import Box from '@material-ui/core/Box';
 
-const Container = styled.div`
-  height: 100vh;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-`;
 
-const Row = styled.div`
-  display: flex;
-  width: 100%;
-`;
+const useStyles = makeStyles((theme) => ({
+    videos: {
+        flexGrow: 10,
+        width: '100vw',
+        minHeight: '100%',
+        backgroundColor: 'black',
+    },
+    video: {
+        height: '100%',
+        widht: '100%',
+    },
+    controls: {
+        flexGrow: 1,
+        width: '100vw',
+        alignItems: 'center',
+    },
+    root: {
+        height: '100vh',
+    }
+}))
 
-const Video = styled.video`
-  border: 1px solid blue;
-  width: 50%;
-  height: 50%;
-`;
+
 
 function CallRoom() {
-    const currentChat = useLocation().pathname.split('/')[2];
+    const history = useHistory();
+    const location = useLocation();
     const authUser = useAuth();
-
+    const classes = useStyles();
 
     const [yourID, setYourID] = useState(authUser.user.uid);
     const [users, _setUsers] = useState([]);
@@ -36,7 +50,7 @@ function CallRoom() {
         usersRef.current = data;
         _setUsers(data);
     };
-    const [inCallRef, setInCallRef] = useState(db.ref('chats/' + currentChat + '/inCall'));
+    const [inCallRef, setInCallRef] = useState(db.ref('chats/' + location.state.currentChat + '/inCall'));
 
 
     const [stream, _setStream] = useState();
@@ -48,7 +62,7 @@ function CallRoom() {
 
     const userVideo = useRef();
 
-    const [uidToCallingSignal,_setUidToCallingSignal] = useState(new Map());
+    const [uidToCallingSignal, _setUidToCallingSignal] = useState(new Map());
     const uidToCallingSignalRef = useRef(new Map());
     const setUidToCallingSignal = (data) => {
         uidToCallingSignalRef.current = data;
@@ -57,7 +71,7 @@ function CallRoom() {
 
 
 
-    const [uidToPeer,_setUidToPeer] = useState(new Map());
+    const [uidToPeer, _setUidToPeer] = useState(new Map());
     const uidToPeerRef = useRef(uidToPeer);
     const setUidToPeer = (data) => {
         uidToPeerRef.current = data;
@@ -70,7 +84,7 @@ function CallRoom() {
 
 
 
-        navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(stream => {
+        navigator.mediaDevices.getUserMedia({ video: { height: '500px', width: '500px' }, audio: true }).then(stream => {
             setStream(stream);
             if (userVideo.current) {
                 userVideo.current.srcObject = streamRef.current;
@@ -101,7 +115,7 @@ function CallRoom() {
 
         const userCallingMeCallback = inCallRef.child(yourID).on('child_added', (callingUser) => {
             let tempMap = new Map(uidToCallingSignalRef.current);
-            tempMap.set(callingUser.key,callingUser.child('callingData').child('signalData').val());
+            tempMap.set(callingUser.key, callingUser.child('callingData').child('signalData').val());
             setUidToCallingSignal(tempMap);
             acceptCall(callingUser.key);
         });
@@ -110,10 +124,14 @@ function CallRoom() {
         return () => {
             inCallRef.off('child_added', newUserIncallCallback);
             inCallRef.child(yourID).off('child_added', userCallingMeCallback);
+            inCallRef.child(yourID).remove();
+            uidToPeerRef.current.forEach((peer)=>{
+                peer.destroy();
+            });
         }
     }, []);
 
-  
+
 
 
     function callPeer(id) {
@@ -129,7 +147,7 @@ function CallRoom() {
                         credential: "qwertyuiop"
                     },
                     {
-                        urls:"stun:stun.wtfismyip.com",
+                        urls: "stun:stun.wtfismyip.com",
                     },
                     {
                         urls: "turn:numb.viagenie.ca",
@@ -145,7 +163,11 @@ function CallRoom() {
             inCallRef.child(id).child(yourID).set({ callingData: { signalData: data } });
         })
 
-       
+        peer.on('close',() => {
+            let tempMap = new Map(uidToPeerRef.current);
+            tempMap.delete(id);
+            setUidToPeer(tempMap);
+        });
 
 
         inCallRef.child(id).child(yourID).child('returnSignalData').on('child_added', (callAccepted) => {
@@ -153,7 +175,7 @@ function CallRoom() {
         })
 
         let tempMap = new Map(uidToPeerRef.current);
-        tempMap.set(id,peer);
+        tempMap.set(id, peer);
         setUidToPeer(tempMap);
 
     }
@@ -171,7 +193,7 @@ function CallRoom() {
                         credential: "qwertyuiop"
                     },
                     {
-                        urls:"stun:stun.wtfismyip.com",
+                        urls: "stun:stun.wtfismyip.com",
                     },
                     {
                         urls: "turn:numb.viagenie.ca",
@@ -186,56 +208,81 @@ function CallRoom() {
             inCallRef.child(yourID).child(caller).child("returnSignalData").set({ signalData: data });
         })
 
-        
+
 
         peer.signal(uidToCallingSignalRef.current.get(caller));
-        
+
+        peer.on('close',() => {
+            let tempMap = new Map(uidToPeerRef.current);
+            tempMap.delete(caller);
+            setUidToPeer(tempMap);
+        });
+
         let tempMap = new Map(uidToPeerRef.current);
-        tempMap.set(caller,peer);
+        tempMap.set(caller, peer);
         setUidToPeer(tempMap);
 
     }
-
-    let UserVideo;
-    if (streamRef.current) {
-        UserVideo = (
-            <Video playsInline muted ref={userVideo} autoPlay />
-        );
-    }
-
 
     const VideoComponent = (props) => {
         const ref = useRef();
 
         useEffect(() => {
-            props.peer.on("stream",stream =>{
+            props.peer.on("stream", stream => {
                 ref.current.srcObject = stream;
             });
-        },[]);
+        }, []);
 
-        return (<Video playsInline autoPlay ref={ref}/>);
+        return (<video playsInline autoPlay ref={ref} />);
 
     }
 
-    const renderVideos = () => {
-        let partnerVideos = [];
-        uidToPeerRef.current.forEach((peer,uid) => {
-            partnerVideos.push(<VideoComponent peer={peer} key={uid}/>);
-        });
-        return partnerVideos;
-    };
-
 
     return (
-        <Container>
-            <Row>
-                {UserVideo}
-                {   
-                    renderVideos()
-                }
-            </Row>
-        </Container>
+        <Grid container direction='row'>
+            <Grid item style={{ flexGrow: 7 }}>
+                <Grid container direction='column' style={{ minHeight: '100vh', height: 'auto' }}>
+                    <Grid item className={classes.videos}>
+                        <Grid container style={{ flexWrap: 'wrap' }}>
+                            <Grid item>
+                                <video playsInline autoPlay muted ref={userVideo} />
+                            </Grid>
+                            {
+                                [...uidToPeer.entries()].map(([uid, peer]) => {
+                                    return (
+                                        <Grid item key={uid}>
+                                            <VideoComponent peer={peer}/>
+                                        </Grid>
+                                    );
+                                })
+                            }
+                        </Grid>
+                    </Grid>
+                    <Grid item className={classes.controls}>
+                        <Box display='flex' justifyContent='center' alignItems='center'>
+                            <IconButton
+                                onClick={(event) => {
+                                    event.preventDefault();
+                                    history.replace(ROUTES.MAINROOM);
+                                }}
+                            >
+                                <CallEndIcon color='secondary' />
+                            </IconButton>
+                        </Box>
+                    </Grid>
+                </Grid>
+            </Grid>
+            <Grid item style={{ flexGrow: 3 }}>
+                <Chats currentChat={location.state.currentChat} currentContact={''} key={location.state.currentChat} />
+            </Grid>
+        </Grid>
     );
+
+
+
+
+
+
 }
 
 export default CallRoom;
