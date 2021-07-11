@@ -76,13 +76,14 @@ const ContactCallRoom = (props) => {
             contactDbRef.child('inCall').onDisconnect().set(false);
             contactDbRef.child('data').onDisconnect().remove();
             navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then((stream) => {
+                console.log("hey yo")
                 setStream(stream);
                 if (userVideo.current) {
                     userVideo.current.srcObject = stream;
                 }
 
                 myDbRef.child('inCall').get().then((data) => {
-                    userPeer.current = createPeer(data.val(), contactDbRef, myDbRef, stream);
+                    userPeer.current = createPeer(!data.val(), contactDbRef, myDbRef, stream);
                 })
 
             });
@@ -90,7 +91,8 @@ const ContactCallRoom = (props) => {
 
 
             return () => {
-                myDbRef.off('child_added');
+                myDbRef.child('data').off('child_added');
+                
                 if (streamRef.current) {
                     streamRef.current.getTracks().forEach((track) => { track.stop() });
                 }
