@@ -14,8 +14,6 @@ import CallControls from './CallControls';
 const useStyles = makeStyles((theme) => ({
     videos: {
         flexGrow: 10,
-        width: '100vw',
-        minHeight: '100%',
         backgroundColor: 'black',
     },
     video: {
@@ -24,7 +22,6 @@ const useStyles = makeStyles((theme) => ({
     },
     controls: {
         flexGrow: 1,
-        width: '100vw',
         alignItems: 'center',
     },
     root: {
@@ -239,9 +236,9 @@ function CallRoom() {
 
 
     return (
-        <Grid container direction='row'>
+        <Grid className={classes.root} container direction='row'>
             <Grid item style={{ flexGrow: 7 }}>
-                <Grid container direction='column' style={{ minHeight: '100vh', height: 'auto' }}>
+                <Grid container direction='column' style={{height:'100vh'}}>
                     <Grid item className={classes.videos}>
                         <Grid container style={{ flexWrap: 'wrap' }} spacing={2}>
                             <Grid item>
@@ -265,7 +262,7 @@ function CallRoom() {
                     </Grid>
                 </Grid>
             </Grid>
-            <Grid item style={{ flexGrow: 3 }}>
+            <Grid item style={{ flexGrow: 1 }}>
                 <Chats currentChat={location.state.currentChat} currentContact={''} key={location.state.currentChat} />
             </Grid>
         </Grid>
