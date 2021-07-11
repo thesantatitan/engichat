@@ -13,8 +13,6 @@ import CallControls from './CallControls';
 const useStyles = makeStyles((theme) => ({
     videos: {
         flexGrow: 10,
-        width: '100vw',
-        minHeight: '100%',
         backgroundColor: 'black',
     },
     video: {
@@ -23,11 +21,11 @@ const useStyles = makeStyles((theme) => ({
     },
     controls: {
         flexGrow: 1,
-        width: '100vw',
         alignItems: 'center',
     },
     root: {
         height: '100vh',
+        flexWrap: 'nowrap',
     }
 }))
 
@@ -158,9 +156,9 @@ const ContactCallRoom = (props) => {
     return (
         <Grid container direction="row">
             <Grid item style={{ flexGrow: 7 }}>
-                <Grid container direction="column" style={{ minHeight: '100vh', height: 'auto' }}>
+                <Grid container direction="column" style={{height:'100vh'}}>
                     <Grid item className={classes.videos}>
-                        <Grid container direction="row" alignItems="center" justify="center" spzing={2}>
+                        <Grid container direction="row" alignItems="center" justify="center" spacing={2}>
                             <Grid item className={classes.video}>
                                 <VideoComponent isVideoGiven={true} uid={authUser.user.uid}>
                                     <video playsInline muted ref={userVideo} autoPlay />
@@ -181,7 +179,7 @@ const ContactCallRoom = (props) => {
                     </Grid>
                 </Grid>
             </Grid>
-            <Grid item style={{ flexGrow: 3 }}>
+            <Grid item style={{ flexGrow: 1 }}>
                 <Chats currentChat={''} currentContact={location.state.contact} key={location.state.contact} />
             </Grid>
         </Grid>
