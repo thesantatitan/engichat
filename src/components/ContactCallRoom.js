@@ -162,16 +162,16 @@ const ContactCallRoom = (props) => {
             <Grid item style={{ flexGrow: 7 }}>
                 <Grid container direction="column" style={{ minHeight: '100vh', height: 'auto' }}>
                     <Grid item className={classes.videos}>
-                        <Grid container direction="row" alignItems="center" justify="center">
+                        <Grid container direction="row" alignItems="center" justify="center" spzing={2}>
                             <Grid item className={classes.video}>
-                                <VideoComponent isVideoGiven={true}>
+                                <VideoComponent isVideoGiven={true} uid={authUser.user.uid}>
                                     <video playsInline muted ref={userVideo} autoPlay />
                                 </VideoComponent>
                             </Grid>
                             {
                                 contactStream &&
                                 <Grid item className={classes.video}>
-                                    <VideoComponent isVideoGiven={true}>
+                                    <VideoComponent isVideoGiven={true} uid={location.state.contact}>
                                         <video playsInline ref={contactVideo} autoPlay />
                                     </VideoComponent>
                                 </Grid>

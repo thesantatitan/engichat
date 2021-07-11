@@ -13,6 +13,7 @@ import CallEndIcon from '@material-ui/icons/CallEnd';
 import * as ROUTES from '../constants/routes'
 import Box from '@material-ui/core/Box';
 import VideoComponent from './VideoComponent';
+import {getEmailFromUid} from '../services/firebaseDbHelper';
 
 const useStyles = makeStyles((theme) => ({
     videos: {
@@ -246,9 +247,9 @@ function CallRoom() {
             <Grid item style={{ flexGrow: 7 }}>
                 <Grid container direction='column' style={{ minHeight: '100vh', height: 'auto' }}>
                     <Grid item className={classes.videos}>
-                        <Grid container style={{ flexWrap: 'wrap' }}>
+                        <Grid container style={{ flexWrap: 'wrap' }} spacing={2}>
                             <Grid item>
-                                <VideoComponent isVideoGiven={true}>
+                                <VideoComponent isVideoGiven={true} uid={authUser.user.uid}>
                                     <video playsInline autoPlay muted ref={userVideo} />
                                 </VideoComponent>
                             </Grid>
@@ -256,7 +257,7 @@ function CallRoom() {
                                 [...uidToPeer.entries()].map(([uid, peer]) => {
                                     return (
                                         <Grid item key={uid}>
-                                            <VideoComponent isVideoGiven={false} peer={peer} />
+                                            <VideoComponent isVideoGiven={false} peer={peer} uid={uid} />
                                         </Grid>
                                     );
                                 })
