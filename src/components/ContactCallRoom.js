@@ -76,7 +76,6 @@ const ContactCallRoom = (props) => {
             contactDbRef.child('inCall').onDisconnect().set(false);
             contactDbRef.child('data').onDisconnect().remove();
             navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then((stream) => {
-                console.log("hey yo")
                 setStream(stream);
                 if (userVideo.current) {
                     userVideo.current.srcObject = stream;

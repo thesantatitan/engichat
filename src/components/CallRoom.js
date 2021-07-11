@@ -171,6 +171,12 @@ function CallRoom() {
             let tempMap = new Map(uidToPeerRef.current);
             tempMap.delete(id);
             setUidToPeer(tempMap);
+
+            let tempUsersList = usersRef.current.slice();
+            tempUsersList.splice(tempUsersList.indexOf(id), 1);
+            setUsers(tempUsersList);
+
+            inCallRef.child(id).child(yourID).child('returnSignalData').off();
         });
 
 
@@ -220,6 +226,10 @@ function CallRoom() {
             let tempMap = new Map(uidToPeerRef.current);
             tempMap.delete(caller);
             setUidToPeer(tempMap);
+
+            let tempUsersList = usersRef.current.slice();
+            tempUsersList.splice(tempUsersList.indexOf(caller), 1);
+            setUsers(tempUsersList);
         });
 
         let tempMap = new Map(uidToPeerRef.current);
