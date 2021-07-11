@@ -1,19 +1,15 @@
 import React, { useEffect, useState, useRef } from 'react';
 import '../App.css';
 import Peer from "simple-peer";
-import styled from "styled-components";
 import { db } from '../services/firebase';
 import { useLocation, useHistory } from 'react-router-dom';
 import { useAuth } from '../services/AuthContext';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import Chats from './Chats';
-import IconButton from '@material-ui/core/IconButton';
-import CallEndIcon from '@material-ui/icons/CallEnd';
-import * as ROUTES from '../constants/routes'
-import Box from '@material-ui/core/Box';
 import VideoComponent from './VideoComponent';
-import {getEmailFromUid} from '../services/firebaseDbHelper';
+import CallControls from './CallControls';
+
 
 const useStyles = makeStyles((theme) => ({
     videos: {
@@ -265,16 +261,7 @@ function CallRoom() {
                         </Grid>
                     </Grid>
                     <Grid item className={classes.controls}>
-                        <Box display='flex' justifyContent='center' alignItems='center'>
-                            <IconButton
-                                onClick={(event) => {
-                                    event.preventDefault();
-                                    history.replace(ROUTES.MAINROOM);
-                                }}
-                            >
-                                <CallEndIcon color='secondary' />
-                            </IconButton>
-                        </Box>
+                        <CallControls stream={stream}/>
                     </Grid>
                 </Grid>
             </Grid>

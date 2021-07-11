@@ -5,12 +5,10 @@ import { db } from '../services/firebase';
 import { useAuth } from '../services/AuthContext';
 import Peer from 'simple-peer';
 import { useLocation, useHistory, Redirect } from 'react-router-dom';
-import IconButton from '@material-ui/core/IconButton';
-import CallEndIcon from '@material-ui/icons/CallEnd';
 import * as ROUTES from '../constants/routes'
-import Box from '@material-ui/core/Box';
 import Chats from './Chats';
 import VideoComponent from './VideoComponent';
+import CallControls from './CallControls';
 
 const useStyles = makeStyles((theme) => ({
     videos: {
@@ -179,16 +177,7 @@ const ContactCallRoom = (props) => {
                         </Grid>
                     </Grid>
                     <Grid item className={classes.controls}>
-                        <Box display='flex' justifyContent='center' alignItems='center'>
-                            <IconButton
-                                onClick={(event) => {
-                                    event.preventDefault();
-                                    history.replace(ROUTES.MAINROOM);
-                                }}
-                            >
-                                <CallEndIcon color='secondary' />
-                            </IconButton>
-                        </Box>
+                        <CallControls stream={stream}/>
                     </Grid>
                 </Grid>
             </Grid>

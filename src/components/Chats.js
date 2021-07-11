@@ -1,22 +1,11 @@
 import React from 'react';
-import {Link} from 'react-router-dom';
-import * as ROUTES from '../constants/routes';
 import Grid from '@material-ui/core/Grid';
-import { makeStyles } from '@material-ui/core/styles';
 import Messages from './Messages';
 import {db} from '../services/firebase';
 import {useAuth} from '../services/AuthContext';
 import SendMessage from './SendMessage';
 import {sendMessage, sendMessageToChatRoom} from '../services/firebaseDbHelper';
 
-const useStyles = makeStyles((theme) => ({
-    messages:{
-        flexGrow:8,
-    },
-    controls:{
-        flexGrow:1,
-    }
-}));
 
 const Chats = (props) => {
     const authUser = useAuth();
