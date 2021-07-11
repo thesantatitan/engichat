@@ -10,6 +10,7 @@ import CallEndIcon from '@material-ui/icons/CallEnd';
 import * as ROUTES from '../constants/routes'
 import Box from '@material-ui/core/Box';
 import Chats from './Chats';
+import VideoComponent from './VideoComponent';
 
 const useStyles = makeStyles((theme) => ({
     videos: {
@@ -55,7 +56,7 @@ const ContactCallRoom = (props) => {
 
     const [contactDisconnected, _setContactDisconnected] = useState(false);
     const contactDisconnectedRef = useRef(false);
-    const setContactDisconnected= (data) => {
+    const setContactDisconnected = (data) => {
         contactDisconnectedRef.current = data;
         _setContactDisconnected(data);
     }
@@ -91,7 +92,7 @@ const ContactCallRoom = (props) => {
 
             return () => {
                 myDbRef.child('data').off('child_added');
-                
+
                 if (streamRef.current) {
                     streamRef.current.getTracks().forEach((track) => { track.stop() });
                 }
@@ -140,14 +141,14 @@ const ContactCallRoom = (props) => {
             }
         });
 
-        peer.on('close',() => {
+        peer.on('close', () => {
             setContactStream(null);
-            if(contactVideo.current) {
+            if (contactVideo.current) {
                 contactVideo.current.srcObject = null;
             }
             setContactDisconnected(!contactDisconnectedRef.current);
         });
-        
+
         return peer;
 
     }
@@ -163,11 +164,18 @@ const ContactCallRoom = (props) => {
                     <Grid item className={classes.videos}>
                         <Grid container direction="row" alignItems="center" justify="center">
                             <Grid item className={classes.video}>
-                                <video playsInline muted ref={userVideo} autoPlay />
+                                <VideoComponent isVideoGiven={true}>
+                                    <video playsInline muted ref={userVideo} autoPlay />
+                                </VideoComponent>
                             </Grid>
-                            <Grid item className={classes.video}>
-                                <video playsInline ref={contactVideo} autoPlay />
-                            </Grid>
+                            {
+                                contactStream &&
+                                <Grid item className={classes.video}>
+                                    <VideoComponent isVideoGiven={true}>
+                                        <video playsInline ref={contactVideo} autoPlay />
+                                    </VideoComponent>
+                                </Grid>
+                            }
                         </Grid>
                     </Grid>
                     <Grid item className={classes.controls}>

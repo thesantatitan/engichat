@@ -3,7 +3,7 @@ import '../App.css';
 import Peer from "simple-peer";
 import styled from "styled-components";
 import { db } from '../services/firebase';
-import { useLocation,useHistory } from 'react-router-dom';
+import { useLocation, useHistory } from 'react-router-dom';
 import { useAuth } from '../services/AuthContext';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
@@ -12,7 +12,7 @@ import IconButton from '@material-ui/core/IconButton';
 import CallEndIcon from '@material-ui/icons/CallEnd';
 import * as ROUTES from '../constants/routes'
 import Box from '@material-ui/core/Box';
-
+import VideoComponent from './VideoComponent';
 
 const useStyles = makeStyles((theme) => ({
     videos: {
@@ -128,7 +128,7 @@ function CallRoom() {
             if (streamRef.current) {
                 streamRef.current.getTracks().forEach((track) => { track.stop() });
             }
-            uidToPeerRef.current.forEach((peer)=>{
+            uidToPeerRef.current.forEach((peer) => {
                 peer.destroy();
             });
             setUidToPeer(new Map());
@@ -167,7 +167,7 @@ function CallRoom() {
             inCallRef.child(id).child(yourID).set({ callingData: { signalData: data } });
         })
 
-        peer.on('close',() => {
+        peer.on('close', () => {
             let tempMap = new Map(uidToPeerRef.current);
             tempMap.delete(id);
             setUidToPeer(tempMap);
@@ -222,7 +222,7 @@ function CallRoom() {
 
         peer.signal(uidToCallingSignalRef.current.get(caller));
 
-        peer.on('close',() => {
+        peer.on('close', () => {
             let tempMap = new Map(uidToPeerRef.current);
             tempMap.delete(caller);
             setUidToPeer(tempMap);
@@ -238,18 +238,7 @@ function CallRoom() {
 
     }
 
-    const VideoComponent = (props) => {
-        const ref = useRef();
 
-        useEffect(() => {
-            props.peer.on("stream", stream => {
-                ref.current.srcObject = stream;
-            });
-        }, []);
-
-        return (<video playsInline autoPlay ref={ref} />);
-
-    }
 
 
     return (
@@ -259,13 +248,15 @@ function CallRoom() {
                     <Grid item className={classes.videos}>
                         <Grid container style={{ flexWrap: 'wrap' }}>
                             <Grid item>
-                                <video playsInline autoPlay muted ref={userVideo} />
+                                <VideoComponent isVideoGiven={true}>
+                                    <video playsInline autoPlay muted ref={userVideo} />
+                                </VideoComponent>
                             </Grid>
                             {
                                 [...uidToPeer.entries()].map(([uid, peer]) => {
                                     return (
                                         <Grid item key={uid}>
-                                            <VideoComponent peer={peer}/>
+                                            <VideoComponent isVideoGiven={false} peer={peer} />
                                         </Grid>
                                     );
                                 })
