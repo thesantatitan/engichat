@@ -19,8 +19,8 @@ const Chats = (props) => {
     } else {
         if (props.currentChat !== '') {
             return (
-                <Box border={2} borderColor='secondary' p={2}>
-                    <Grid container spacing={2} direction="column" style={{ minHeight: '100%', alignItems: 'stretch', justifyContent: 'flex-end' }}>
+                <Box border={2} borderColor='secondary' p={2} style={{maxHeight:'100%',minHeight:'100%'}}>
+                    <Grid container spacing={2} direction="column" style={{ minHeight: '100%', alignItems: 'stretch' }}>
                         <Grid item>
                             <Messages messagesDbRef={db.ref('chats/' + props.currentChat + '/messages')} />
                         </Grid>
@@ -32,8 +32,8 @@ const Chats = (props) => {
             );
         } else {
             return (
-                <Box border={2} borderColor='secondary' p={2}>
-                    <Grid container spacing={2} direction="column" style={{ minHeight: '100%', alignItems: 'stretch', justifyContent: 'flex-end' }}>
+                <Box border={2} borderColor='secondary' p={2} style={{maxHeight:'100%',minHeight:'100%'}}>
+                    <Grid container spacing={2} direction="column" style={{ minHeight: '100%', alignItems: 'stretch'}}>
                         <Grid item>
                             <Messages messagesDbRef={db.ref('users/' + authUser.user.uid + '/contacts/' + props.currentContact + '/messages')} />
                         </Grid>
