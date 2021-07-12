@@ -33,7 +33,7 @@ One example could be an AR competitive dancing game.
 
 ### VideoCall
 
-![Video call Screenshot](docs/screenshots/videoCall.PNG)
+![Video call Screenshot](docs/screenshots/videocall.PNG)
 
 ## Cross-platform
 
