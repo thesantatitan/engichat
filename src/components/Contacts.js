@@ -67,7 +67,7 @@ const Contacts = (props) => {
                                     borderWidth: '4px',
                                 }}
                                 key={contact}
-                                onClick={() => {props.currentContact===contact?props.updateContact(''):props.updateContact(contact)}}
+                                onClick={() => { props.currentContact === contact ? props.updateContact('') : props.updateContact(contact) }}
                             >
                                 <UserCard
                                     uid={contact}
@@ -81,11 +81,20 @@ const Contacts = (props) => {
                     <form>
                         <TextField style={{ width: '70%' }} variant="outlined" label='Email'
                             onChange={(event) => { setUserToAdd(event.target.value) }}
+                            value={userToAdd}
+                            onKeyPress={(event) => {
+                                if (event.key === 'Enter') {
+                                    event.preventDefault();
+                                    addUserToContact(authUser.user.uid, userToAdd);
+                                    setUserToAdd('');
+                                }
+                            }}
                         />
                         <IconButton
                             onClick={(event) => {
                                 event.preventDefault();
                                 addUserToContact(authUser.user.uid, userToAdd);
+                                setUserToAdd('');
                             }}
                         >
                             <PersonAddIcon />

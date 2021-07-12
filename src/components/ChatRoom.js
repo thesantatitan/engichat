@@ -1,9 +1,9 @@
-import React , {useEffect, useState, useRef} from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
-import {db} from '../services/firebase';
+import { db } from '../services/firebase';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import AddIcon from '@material-ui/icons/Add';
 import Typography from '@material-ui/core/Typography';
@@ -12,34 +12,34 @@ import UserCard from './UserCard';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import TextField from '@material-ui/core/TextField';
-import {addUserEmailToChat,deleteUserFromChat} from '../services/firebaseDbHelper';
+import { addUserEmailToChat, deleteUserFromChat } from '../services/firebaseDbHelper';
 import clsx from 'clsx';
 
 const useStyles = makeStyles((theme) => ({
-    root:{
-        width:'98%',
+    root: {
+        width: '98%',
     },
     heading: {
         fontSize: theme.typography.pxToRem(12),
         fontWeight: theme.typography.fontWeightRegular,
-        flexGrow:1,
+        flexGrow: 1,
     },
     details: {
         padding: theme.spacing(1),
     },
-    selected:{
-        borderStyle:"solid",
-        borderColor:"green",
-        borderWidth:"4px",
+    selected: {
+        borderStyle: "solid",
+        borderColor: "green",
+        borderWidth: "4px",
     },
 }))
 
 
 const ChatRoom = (props) => {
     const classes = useStyles();
-    const userDbRef = db.ref('chats/'+props.chatID+'/users');
-    const [userList,_setUserList] = useState([]);
-    const [userToAdd,setUserToAdd] = useState('');
+    const userDbRef = db.ref('chats/' + props.chatID + '/users');
+    const [userList, _setUserList] = useState([]);
+    const [userToAdd, setUserToAdd] = useState('');
     const userListRef = useRef(userList);
 
     const setUserList = (data) => {
@@ -49,64 +49,73 @@ const ChatRoom = (props) => {
 
 
     useEffect(() => {
-        const listener = userDbRef.on('child_added',(data)=>{
-            if(data !== undefined){
+        const listener = userDbRef.on('child_added', (data) => {
+            if (data !== undefined) {
                 setUserList([...userListRef.current, data.key]);
             }
         });
-        return () => userDbRef.off('child_added',listener)
-    },[]);
+        return () => userDbRef.off('child_added', listener)
+    }, []);
 
     useEffect(() => {
-        const listener = userDbRef.on('child_removed',(data) => {
-            if(data !== undefined){
+        const listener = userDbRef.on('child_removed', (data) => {
+            if (data !== undefined) {
                 let newUserList = userListRef.current.slice();
-                newUserList.splice(newUserList.indexOf(data.key),1);
+                newUserList.splice(newUserList.indexOf(data.key), 1);
                 setUserList(newUserList);
             }
         });
-        return () => userDbRef.off('child_removed',listener)
-    },[]);
+        return () => userDbRef.off('child_removed', listener)
+    }, []);
 
-    return ( 
-        <div className={clsx(classes.root,props.chatID===props.currentChat && classes.selected)}>
-            <Accordion 
-                expanded={props.chatID===props.currentChat}
-                onChange={(event,isExpanded) =>{
-                    if(isExpanded){
+    return (
+        <div className={clsx(classes.root, props.chatID === props.currentChat && classes.selected)}>
+            <Accordion
+                expanded={props.chatID === props.currentChat}
+                onChange={(event, isExpanded) => {
+                    if (isExpanded) {
                         props.updateChat(props.chatID);
-                    }else{
+                    } else {
                         props.updateChat('');
                     }
                 }}
             >
-                <AccordionSummary expandIcon={<ExpandMoreIcon/>}>
+                <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                     <Typography className={classes.heading}>Room: {props.chatID}</Typography>
                 </AccordionSummary>
                 <AccordionDetails className={classes.details}>
                     <List>
-                        {   
-                            userList.map((user) =>{
-                                return <UserCard 
-                                    uid={user} 
-                                    chatID={props.chatID} 
+                        {
+                            userList.map((user) => {
+                                return <UserCard
+                                    uid={user}
+                                    chatID={props.chatID}
                                     key={user}
-                                    handleClickOnDelete = {() => {deleteUserFromChat(user,props.chatID)}}
+                                    handleClickOnDelete={() => { deleteUserFromChat(user, props.chatID) }}
                                 />
                             })
                         }
                         <ListItem>
                             <form>
-                                <TextField style={{width:'70%'}} variant="outlined" label='Email'
-                                    onChange={(event) => {setUserToAdd(event.target.value)}}
+                                <TextField style={{ width: '70%' }} variant="outlined" label='Email'
+                                    onChange={(event) => { setUserToAdd(event.target.value) }}
+                                    value={userToAdd}
+                                    onKeyPress={(event) => {
+                                        if (event.key === 'Enter') {
+                                            event.preventDefault();
+                                            addUserEmailToChat(userToAdd, props.chatID);
+                                            setUserToAdd('');
+                                        }
+                                    }}
                                 />
-                                <IconButton 
+                                <IconButton
                                     onClick={(event) => {
                                         event.preventDefault();
-                                        addUserEmailToChat(userToAdd,props.chatID);
+                                        addUserEmailToChat(userToAdd, props.chatID);
+                                        setUserToAdd('');
                                     }}
                                 >
-                                    <AddIcon/>
+                                    <AddIcon />
                                 </IconButton>
                             </form>
                         </ListItem>
@@ -114,9 +123,9 @@ const ChatRoom = (props) => {
                 </AccordionDetails>
             </Accordion>
         </div>
-     );
+    );
 }
- 
 
- 
+
+
 export default ChatRoom;
