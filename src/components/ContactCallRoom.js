@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: 'black',
     },
     video: {
-        height: '100%',
+        height: '100px',
         widht: '100%',
     },
     controls: {
@@ -72,7 +72,7 @@ const ContactCallRoom = (props) => {
             contactDbRef.child('inCall').set(true);
             contactDbRef.child('inCall').onDisconnect().set(false);
             contactDbRef.child('data').onDisconnect().remove();
-            navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then((stream) => {
+            navigator.mediaDevices.getUserMedia({ video:{ width:'800px'}, audio: true }).then((stream) => {
                 setStream(stream);
                 if (userVideo.current) {
                     userVideo.current.srcObject = stream;
