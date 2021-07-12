@@ -4,6 +4,10 @@ Engichat is a Microsoft teams clone written in react with a backend of firebase.
 It uses web-rtc for video calling, and firebase is also used as a signalling server.
 This project was devloped for the Microsoft engage program.
 
+## Demo
+
+A demo can be found [here](engichat.web.app). The video calling feature might not work since I don't have a STUN or TURN server.
+
 ## Build Instructions
 
 1. Download the firebase config for your web app and export it as firebaseConfig in src/services/firebaseConfig.js
