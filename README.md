@@ -15,4 +15,22 @@ This project was devloped for the Microsoft engage program.
 ## Innovative Idea
 
 We can make this in a platform for dveloping social colaborative apps and games. For that we need to create an SDK that exposes several things, like the number of people in a call, a way to change the layout of participants, a way to acces video, etc. This could allow developers to make collaborative apps and games around the video call feature.
-One exaple could be an AR competitive dancing game.
+One example could be an AR competitive dancing game.
+
+## Screenshots
+
+### Signin
+
+[](docs/screenshots/signin.PNG)
+
+### Signup
+
+[](docs/screenshots/signup.PNG)
+
+### Chats
+
+[](docs/screenshots/chats.PNG)
+
+### VideoCall
+
+[](docs/screenshots/videoCall.PNG)
