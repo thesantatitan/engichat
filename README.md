@@ -21,16 +21,16 @@ One example could be an AR competitive dancing game.
 
 ### Signin
 
-[](docs/screenshots/signin.PNG)
+![Signin Screenshot](docs/screenshots/signin.PNG)
 
 ### Signup
 
-[](docs/screenshots/signup.PNG)
+![Signup Screenshot](docs/screenshots/signup.PNG)
 
 ### Chats
 
-[](docs/screenshots/chats.PNG)
+![Chats Screenshot](docs/screenshots/chatwithcontact.PNG)
 
 ### VideoCall
 
-[](docs/screenshots/videoCall.PNG)
+![Video call Screenshot](docs/screenshots/videoCall.PNG)
