@@ -38,7 +38,7 @@ function CallRoom() {
     const authUser = useAuth();
     const classes = useStyles();
 
-    const [yourID, setYourID] = useState();
+
     const [users, _setUsers] = useState([]);
     const usersRef = useRef([]);
     const setUsers = (data) => {
@@ -72,20 +72,23 @@ function CallRoom() {
         _setUidToPeer(data);
     };
 
+
+    const [gotStream,setGotStream] = useState(true);
+
     useEffect(() => {
         if (location.state) {
             let newUserIncallCallback = {};
+            const yourID = authUser.user.uid;
 
             const inCallRef = db.ref('chats/' + location.state.currentChat + '/inCall');
-
-            setYourID(authUser.user.uid);
 
             navigator.mediaDevices.getUserMedia({ video: { height: '500px', width: '500px' }, audio: true }).then(stream => {
                 setStream(stream);
                 if (userVideo.current) {
                     userVideo.current.srcObject = streamRef.current;
                 }
-            });
+                setGotStream(true);
+            }).catch(() => setGotStream(false));
 
 
 
@@ -108,6 +111,8 @@ function CallRoom() {
                     }
                 });
             });
+
+
 
             const userCallingMeCallback = inCallRef.child(yourID).on('child_added', (callingUser) => {
                 let tempMap = new Map(uidToCallingSignalRef.current);
@@ -136,6 +141,8 @@ function CallRoom() {
 
 
     function callPeer(id) {
+        const yourID = authUser.user.uid;
+
         const inCallRef = db.ref('chats/' + location.state.currentChat + '/inCall');
         const peer = new Peer({
             initiator: true,
@@ -189,6 +196,8 @@ function CallRoom() {
     }
 
     function acceptCall(caller) {
+        const yourID = authUser.user.uid;
+
         const inCallRef = db.ref('chats/' + location.state.currentChat + '/inCall');
         const peer = new Peer({
             initiator: false,
@@ -240,6 +249,10 @@ function CallRoom() {
 
     if (!location.state) {
         return <Redirect to={ROUTES.MAINROOM} />
+    }
+
+    if(!gotStream){
+        return <h3 style={{textAlign:'center'}}>We need video and audio access to start the call please allow access and reload</h3>
     }
 
     return (
