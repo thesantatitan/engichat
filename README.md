@@ -34,3 +34,7 @@ One example could be an AR competitive dancing game.
 ### VideoCall
 
 ![Video call Screenshot](docs/screenshots/videoCall.PNG)
+
+## Cross-platform
+
+Technically the app can work on all browsers which support webrtc, but it has only been tested on Chrome and Firefox on Windows, so there might be UI artifacts on other platforms.
