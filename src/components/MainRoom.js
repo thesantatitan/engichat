@@ -103,8 +103,8 @@ function MainRoom(){
                     </Toolbar>
                 </AppBar>
             </Grid>
-            <Grid item style={{minHeight:'90vh',height:'auto'}}>
-                <Grid container spacing={1} direction="row" alignItems="stretch" style={{minHeight:'90vh',height:'auto'}}>
+            <Grid item style={{minHeight:'80vh',height:'auto'}}>
+                <Grid container spacing={1} direction="row" alignItems="stretch" style={{minHeight:'80vh',height:'auto', overflow:'hide'}}>
                     <Grid item className={classes.rooms}>
                         <Rooms updateChat = {(data) => {setCurrent(data,'')}} currentChat={currentChat}/>
                     </Grid>
